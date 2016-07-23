@@ -1,0 +1,41 @@
+222. Count Complete Tree Nodes  QuestionEditorial Solution  My Submissions
+Total Accepted: 38319
+Total Submissions: 147684
+Difficulty: Medium
+Given a complete binary tree, count the number of nodes.
+
+Definition of a complete binary tree from Wikipedia:
+In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
+
+my solution:
+用暴力法, recursive求会超时 O(N).   如果从某节点一直向左的高度 = 一直向右的高度, 那么以该节点为root的子树一定是complete binary tree. 而 complete binary tree的节点数,可以用公式算出 2^h - 1. 如果高度不相等, 则递归调用 return countNode(left) + countNode(right) + 1.  复杂度为O(h^2) 
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if(!root)  return 0;
+        int leftHeight = 0, rightHeight = 0;
+        TreeNode *leftNode = root, *rightNode = root;
+        while(leftNode){
+            ++leftHeight;
+            leftNode = leftNode -> left;
+        }
+        while(rightNode){
+            ++rightHeight;
+            rightNode = rightNode -> right;
+        }
+        if(leftHeight == rightHeight)
+            return (1 << leftHeight) - 1;
+        else
+            return countNodes(root -> left) + countNodes(root -> right) + 1;
+    }
+};
